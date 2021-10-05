@@ -4,20 +4,34 @@ import os
 import discord
 from dotenv import load_dotenv
 
-#fetching token from .env file 
-
+# getting env tokens 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+GUILD = os.getenv('DISCORD_GUILD')
 
 
-# Creatting client discord connection 
 client = discord.Client()
 
-#creating client 
+# starting client 
 @client.event
 
-# implemented on_ready() event handler 
+# getting guild data from on_ready()
 async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+    #looping for the clients in the guild 
+    for guild in client.guilds:
+        if guild.name == GUILD:
+            break
+
+        print(
+            f'{client.user} is connected to the following guild:\n'
+            f'{guild.name}(id: {guild.id})'
+        )
+        members = '\n - '.join([member.name for member in guild.members]) 
+        print(f'Guild Members:\n - {members}')
+    else:
+        print(
+            f'This are the list of all clients{client.guilds}\n'
+            
+        )
 
 client.run(TOKEN)
